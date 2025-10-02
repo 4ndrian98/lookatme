@@ -186,7 +186,7 @@ async def get_me(user_id: str = Depends(get_current_user)):
 # Store Configuration Endpoints
 @app.get("/api/store/config")
 async def get_store_config(user_id: str = Depends(get_current_user)):
-    config = await db.store_configs.find_one({"user_id": user_id})
+    config = await db.store_configs.find_one({"user_id": user_id}, {"_id": 0})
     if not config:
         # Create default config if not exists
         default_config = StoreConfig(user_id=user_id)
