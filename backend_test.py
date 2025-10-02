@@ -60,10 +60,12 @@ class BackendTester:
         try:
             # Generate unique test data
             test_id = str(uuid.uuid4())[:8]
+            self.test_username = f"testowner_{test_id}"
+            self.test_password = "SecurePass123!"
             user_data = {
-                "username": f"testowner_{test_id}",
+                "username": self.test_username,
                 "email": f"owner_{test_id}@pizzeriaroma.it",
-                "password": "SecurePass123!",
+                "password": self.test_password,
                 "business_name": "Pizzeria Roma Milano"
             }
             
