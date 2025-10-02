@@ -101,3 +101,245 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "CMS Look@Me - Sistema per gestire display in vetrina con personalizzazione contenuti (social media, sostenibilità, recensioni, servizi). Include autenticazione JWT, integrazioni API reali (Google Maps, TripAdvisor, Facebook, Instagram), calcolo AI sostenibilità con Gemini."
+
+backend:
+  - task: "JWT Authentication (register/login)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented JWT authentication with register and login endpoints. Uses bcrypt for password hashing. Token expires after 7 days."
+  
+  - task: "Store Configuration CRUD"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented GET/PUT endpoints for store configuration. Includes toggles for visibility, branding settings, services, and recognitions."
+  
+  - task: "Google Maps API Integration (reviews)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Google Places API integration to fetch reviews and ratings. Requires GOOGLE_MAPS_API_KEY in .env"
+  
+  - task: "TripAdvisor API Integration"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented TripAdvisor Content API integration to fetch reviews. Requires TRIPADVISOR_API_KEY in .env"
+  
+  - task: "Facebook API Integration (likes)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Facebook Graph API to fetch page likes and followers. Requires FACEBOOK_ACCESS_TOKEN in .env"
+  
+  - task: "Instagram API Integration"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Instagram Graph API to fetch followers and media count. Requires INSTAGRAM_ACCESS_TOKEN in .env"
+  
+  - task: "Gemini AI Sustainability Calculation"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented AI-powered sustainability index calculation using Gemini via emergentintegrations. Uses EMERGENT_LLM_KEY. Returns sustainability_index, environmental_score, social_score, recommendations."
+  
+  - task: "Display Preview Endpoint (public)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented public endpoint /api/display/{user_id} to fetch all display data including config, social data, and sustainability for storefront display."
+
+frontend:
+  - task: "Login/Register UI"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented modern login/register interface with toggle between forms. Stores JWT token in localStorage."
+  
+  - task: "CMS Dashboard with Sidebar Navigation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented CMS dashboard with sidebar navigation for 6 sections: Branding, Visibility, Social, Sustainability, Services, Recognitions."
+  
+  - task: "Branding Section (logo, description, mission)"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Allows user to input logo URL, business description, and mission statement."
+  
+  - task: "Visibility Toggles Section"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented toggle switches for 8 different data visibility options (social likes, sustainability, services, etc.)"
+  
+  - task: "Social Media IDs Configuration"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Input fields for Google Place ID, TripAdvisor Location ID, Facebook Page ID, Instagram Username with helpful info box."
+  
+  - task: "Sustainability AI Calculation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Button to calculate sustainability with AI. Displays results including index, scores, and recommendations."
+  
+  - task: "Services Selection (amenities/additional)"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Checkboxes for selecting amenities and additional services. Predefined options like WiFi, parking, delivery, etc."
+  
+  - task: "Recognitions Management"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Add/remove certifications with name and icon URL. Displays in grid format."
+  
+  - task: "Preview Display Mode"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Full preview mode that loads real-time social data and displays storefront view as it would appear in actual display."
+  
+  - task: "Save & Publish Functionality"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Button to save configuration to backend with success/error alerts."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "JWT Authentication (register/login)"
+    - "Store Configuration CRUD"
+    - "Gemini AI Sustainability Calculation"
+    - "Login/Register UI"
+    - "CMS Dashboard with Sidebar Navigation"
+    - "Preview Display Mode"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Initial implementation completed. Full-stack CMS application for Look@Me storefront displays. Backend includes JWT auth, store config CRUD, social media integrations (Google, TripAdvisor, Facebook, Instagram), and Gemini AI for sustainability. Frontend has complete CMS interface with 6 sections, preview mode, and save/publish. Ready for comprehensive backend testing. Note: Social API integrations will return errors if API keys not configured - this is expected behavior."
