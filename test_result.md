@@ -197,15 +197,18 @@ backend:
   
   - task: "Gemini AI Sustainability Calculation"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented AI-powered sustainability index calculation using Gemini via emergentintegrations. Uses EMERGENT_LLM_KEY. Returns sustainability_index, environmental_score, social_score, recommendations."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Gemini AI Sustainability Calculation working perfectly. Successfully calculated sustainability index (78), environmental score (85), social score (70) with 4 actionable recommendations for realistic Italian pizzeria business. AI integration fully functional."
   
   - task: "Display Preview Endpoint (public)"
     implemented: true
