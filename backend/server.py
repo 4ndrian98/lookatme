@@ -31,7 +31,7 @@ client = AsyncIOMotorClient(os.environ.get('MONGO_URL'))
 db = client[os.environ.get('DB_NAME', 'lookatme_cms')]
 
 # Security
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
 security = HTTPBearer()
 JWT_SECRET = os.environ.get('JWT_SECRET', 'default-secret-key')
 JWT_ALGORITHM = "HS256"
