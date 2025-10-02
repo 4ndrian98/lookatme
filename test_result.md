@@ -107,15 +107,18 @@ user_problem_statement: "CMS Look@Me - Sistema per gestire display in vetrina co
 backend:
   - task: "JWT Authentication (register/login)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented JWT authentication with register and login endpoints. Uses bcrypt for password hashing. Token expires after 7 days."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: JWT Authentication working correctly. Fixed bcrypt compatibility issue by switching to pbkdf2_sha256. Registration creates user with unique ID, login returns valid JWT token, auth/me endpoint retrieves user info successfully."
   
   - task: "Store Configuration CRUD"
     implemented: true
