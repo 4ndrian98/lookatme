@@ -89,18 +89,14 @@ class BackendTester:
     async def test_user_login(self):
         """Test user login with registered credentials"""
         try:
-            if not hasattr(self, 'registered_username'):
-                # Use the username from registration
-                test_id = str(uuid.uuid4())[:8]
-                login_data = {
-                    "username": f"testowner_{test_id}",
-                    "password": "SecurePass123!"
-                }
-            else:
-                login_data = {
-                    "username": self.registered_username,
-                    "password": "SecurePass123!"
-                }
+            if not hasattr(self, 'test_username') or not hasattr(self, 'test_password'):
+                self.log_result("User Login", False, "No registration credentials available")
+                return False
+                
+            login_data = {
+                "username": self.test_username,
+                "password": self.test_password
+            }
             
             response = await self.client.post(f"{BASE_URL}/auth/login", json=login_data)
             
