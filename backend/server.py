@@ -164,9 +164,7 @@ async def login(credentials: UserLogin):
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    # Truncate password to 72 bytes for bcrypt compatibility
-    password_bytes = credentials.password.encode('utf-8')[:72]
-    if not pwd_context.verify(password_bytes.decode('utf-8'), user["password_hash"]):
+    if not pwd_context.verify(credentials.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     token = create_access_token({"user_id": user["id"]})
