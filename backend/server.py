@@ -206,7 +206,7 @@ async def update_store_config(config_update: Dict[str, Any], user_id: str = Depe
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Configuration not found")
     
-    updated_config = await db.store_configs.find_one({"user_id": user_id})
+    updated_config = await db.store_configs.find_one({"user_id": user_id}, {"_id": 0})
     return {"message": "Configuration updated successfully", "config": updated_config}
 
 # Social Media Integration Endpoints
