@@ -212,15 +212,18 @@ backend:
   
   - task: "Display Preview Endpoint (public)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented public endpoint /api/display/{user_id} to fetch all display data including config, social data, and sustainability for storefront display."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Display Preview Endpoint working correctly. Successfully aggregates business info, store configuration, sustainability data, and social media data. Fixed MongoDB ObjectId serialization. Public endpoint accessible without authentication."
 
 frontend:
   - task: "Login/Register UI"
