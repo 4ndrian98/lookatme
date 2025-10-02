@@ -141,9 +141,7 @@ async def register(user_data: UserRegister):
     )
     
     user_dict = user.dict()
-    # Truncate password to 72 bytes for bcrypt compatibility
-    password_bytes = user_data.password.encode('utf-8')[:72]
-    user_dict["password_hash"] = pwd_context.hash(password_bytes.decode('utf-8'))
+    user_dict["password_hash"] = pwd_context.hash(user_data.password)
     
     await db.users.insert_one(user_dict)
     
