@@ -122,15 +122,18 @@ backend:
   
   - task: "Store Configuration CRUD"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented GET/PUT endpoints for store configuration. Includes toggles for visibility, branding settings, services, and recognitions."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Store Configuration CRUD working correctly. Fixed MongoDB ObjectId serialization issue by excluding _id field. GET endpoint retrieves config, PUT endpoint updates configuration successfully with realistic store data."
   
   - task: "Google Maps API Integration (reviews)"
     implemented: true
