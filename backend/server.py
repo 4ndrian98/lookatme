@@ -382,17 +382,18 @@ Be realistic and provide actionable insights.
 @app.get("/api/display/{user_id}")
 async def get_display_data(user_id: str):
     """Public endpoint to get display data for storefront"""
-    user = await db.users.find_one({"id": user_id})
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    config = await db.store_configs.find_one({"user_id": user_id})
+    config = await db.store_configs.find_one({"user_id": user_id}, {"_id": 0})
     if not config:
         raise HTTPException(status_code=404, detail="Configuration not found")
     
     # Get latest sustainability assessment
     sustainability = await db.sustainability_assessments.find_one(
         {"user_id": user_id},
+        {"_id": 0},
         sort=[("created_at", -1)]
     )
     
