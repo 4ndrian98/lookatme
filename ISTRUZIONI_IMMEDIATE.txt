@@ -1,0 +1,114 @@
+╔══════════════════════════════════════════════════════════════╗
+║    Look@Me CMS - CORREZIONI APPLICATE - RIPROVA ORA!        ║
+╚══════════════════════════════════════════════════════════════╝
+
+✅ PROBLEMI RISOLTI:
+
+1. ✅ Rimosso warning "version obsolete" dal docker-compose.yml
+2. ✅ Corretto path per yarn.lock nel Dockerfile.frontend
+3. ✅ Aggiunto curl al backend per health checks
+4. ✅ Configurato emergentintegrations nel build
+
+
+🚀 RIPROVA ADESSO:
+
+Opzione 1 - PowerShell (dalla cartella del progetto):
+────────────────────────────────────────────────────────────
+cd "C:\Users\ITS\Desktop\CORSO AI Andrian Ghiba\lookatme"
+docker-compose up --build
+
+
+Opzione 2 - Script automatico:
+────────────────────────────────────────────────────────────
+Doppio click su: start-docker.bat
+
+
+⏱️ TEMPI ATTESI:
+────────────────────────────────────────────────────────────
+• Prima volta: 5-10 minuti (scarica e costruisce tutto)
+• Successivamente: 30-60 secondi
+
+
+📋 COSA VEDRAI:
+────────────────────────────────────────────────────────────
+[+] Building ...
+  ✔ backend Pulled
+  ✔ frontend Pulled
+  ✔ mongodb Pulled
+
+lookatme-backend-1   | INFO: Uvicorn running on http://0.0.0.0:8001
+lookatme-frontend-1  | /docker-entrypoint.sh: Launching nginx
+lookatme-mongodb-1   | MongoDB starting
+
+✅ Quando vedi questi messaggi = PRONTO!
+
+
+🌐 APRI IL BROWSER:
+────────────────────────────────────────────────────────────
+http://localhost:3000
+
+
+🆘 SE HAI ANCORA ERRORI:
+────────────────────────────────────────────────────────────
+
+Errore: "Port already in use"
+────────────────────────────────────────────────────────────
+Qualcosa sta usando le porte. Trova e termina:
+
+# Trova cosa usa la porta 3000
+netstat -ano | findstr :3000
+
+# Termina il processo (sostituisci 1234 con il PID trovato)
+taskkill /PID 1234 /F
+
+
+Errore: "Cannot connect to Docker daemon"
+────────────────────────────────────────────────────────────
+Docker Desktop non è avviato:
+1. Apri Docker Desktop
+2. Aspetta che sia pronto (icona balena ferma)
+3. Riprova
+
+
+Errore durante il build
+────────────────────────────────────────────────────────────
+Pulisci e riparti:
+
+# Ferma tutto
+docker-compose down
+
+# Pulisci cache Docker
+docker system prune -f
+
+# Ricostruisci
+docker-compose up --build
+
+
+🔍 VERIFICA MANUALE:
+────────────────────────────────────────────────────────────
+
+# Controlla che Docker sia attivo
+docker --version
+
+# Lista container in esecuzione
+docker ps
+
+# Visualizza logs
+docker-compose logs -f
+
+
+📞 FILE DI SUPPORTO:
+────────────────────────────────────────────────────────────
+• WINDOWS_SETUP.md       - Guida completa Windows
+• DOCKER_DEPLOY.md       - Troubleshooting dettagliato
+• QUICK_START_WINDOWS.txt - Riferimento rapido
+
+
+💡 IMPORTANTE:
+────────────────────────────────────────────────────────────
+✅ Docker Desktop DEVE essere in esecuzione PRIMA di lanciare i comandi
+✅ Aspetta che l'icona della balena sia ferma (non animata)
+✅ Se è la prima volta, ci vogliono 5-10 minuti per scaricare tutto
+
+
+Ora riprova! Dovrebbe funzionare! 🚀
