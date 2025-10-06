@@ -210,34 +210,45 @@ async def update_store_config(config_update: Dict[str, Any], user_id: str = Depe
     updated_config = await db.store_configs.find_one({"user_id": user_id}, {"_id": 0})
     return {"message": "Configuration updated successfully", "config": updated_config}
 
-# Social Media Integration Endpoints
+# Social Media Integration Endpoints (via BrightData)
+from brightdata_integration import get_social_data_via_brightdata, BrightDataClient
+
 @app.get("/api/social/google-reviews")
-async def get_google_reviews(place_id: str, user_id: str = Depends(get_current_user)):
-    if not GOOGLE_MAPS_API_KEY:
-        return {"error": "Google Maps API key not configured", "reviews": [], "rating": 0}
+async def get_google_reviews(place_url: str, user_id: str = Depends(get_current_user)):
+    """
+    Get Google Maps reviews via BrightData
+    Args:
+        place_url: Full Google Maps URL (e.g., https://www.google.com/maps/place/...)
+    """
+    if not BRIGHTDATA_API_TOKEN:
+        return {"error": "BrightData API token not configured", "reviews": [], "rating": 0}
     
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"https://maps.googleapis.com/maps/api/place/details/json",
-                params={
-                    "place_id": place_id,
-                    "fields": "rating,user_ratings_total,reviews",
-                    "key": GOOGLE_MAPS_API_KEY
-                },
-                timeout=10.0
-            )
-            data = response.json()
-            
-            if data.get("status") == "OK":
-                result = data.get("result", {})
-                return {
-                    "rating": result.get("rating", 0),
-                    "total_ratings": result.get("user_ratings_total", 0),
-                    "reviews": result.get("reviews", [])[:5]  # Top 5 reviews
-                }
-            else:
-                return {"error": f"Google API error: {data.get('status')}", "reviews": [], "rating": 0}
+        result = await get_social_data_via_brightdata(
+            platform="googlemaps",
+            url=place_url,
+            api_token=BRIGHTDATA_API_TOKEN,
+            params={"days_limit": 30},
+            wait_for_results=False  # Return job_id immediately
+        )
+        
+        if result.get("status") == "job_created":
+            # Store job for later polling
+            await db.brightdata_jobs.insert_one({
+                "user_id": user_id,
+                "job_id": result["job_id"],
+                "platform": "googlemaps",
+                "url": place_url,
+                "status": "running",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+            return {
+                "message": "Crawl job started. Check status with job_id.",
+                "job_id": result["job_id"],
+                "status": "running"
+            }
+        else:
+            return result
     except Exception as e:
         return {"error": str(e), "reviews": [], "rating": 0}
 
