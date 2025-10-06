@@ -309,27 +309,40 @@ async def get_facebook_likes(page_url: str, user_id: str = Depends(get_current_u
         return {"error": str(e), "likes": 0, "followers": 0}
 
 @app.get("/api/social/instagram-data")
-async def get_instagram_data(username: str, user_id: str = Depends(get_current_user)):
-    if not INSTAGRAM_ACCESS_TOKEN:
-        return {"error": "Instagram access token not configured", "followers": 0, "media_count": 0}
+async def get_instagram_data(profile_url: str, user_id: str = Depends(get_current_user)):
+    """
+    Get Instagram profile data via BrightData
+    Args:
+        profile_url: Full Instagram profile URL (e.g., https://www.instagram.com/username/)
+    """
+    if not BRIGHTDATA_API_TOKEN:
+        return {"error": "BrightData API token not configured", "followers": 0, "media_count": 0}
     
     try:
-        async with httpx.AsyncClient() as client:
-            # Instagram Graph API (requires Business account)
-            response = await client.get(
-                f"https://graph.instagram.com/me",
-                params={
-                    "fields": "followers_count,media_count,username",
-                    "access_token": INSTAGRAM_ACCESS_TOKEN
-                },
-                timeout=10.0
-            )
-            data = response.json()
+        result = await get_social_data_via_brightdata(
+            platform="instagram",
+            url=profile_url,
+            api_token=BRIGHTDATA_API_TOKEN,
+            params={},
+            wait_for_results=False
+        )
+        
+        if result.get("status") == "job_created":
+            await db.brightdata_jobs.insert_one({
+                "user_id": user_id,
+                "job_id": result["job_id"],
+                "platform": "instagram",
+                "url": profile_url,
+                "status": "running",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
             return {
-                "followers": data.get("followers_count", 0),
-                "media_count": data.get("media_count", 0),
-                "username": data.get("username", username)
+                "message": "Crawl job started. Check status with job_id.",
+                "job_id": result["job_id"],
+                "status": "running"
             }
+        else:
+            return result
     except Exception as e:
         return {"error": str(e), "followers": 0, "media_count": 0}
 
