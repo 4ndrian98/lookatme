@@ -6,10 +6,11 @@ Sistema CMS completo per gestire display in vetrina con personalizzazione conten
 
 - **Autenticazione JWT** - Sistema sicuro di registrazione e login
 - **Dashboard CMS Completo** - Gestione branding, visibilità, social, sostenibilità, servizi e riconoscimenti
-- **Integrazioni Social Media** - Google Maps, TripAdvisor, Facebook, Instagram
+- **Integrazioni Social Media** - Instagram, Facebook, Google Maps (via BrightData), TripAdvisor (API diretta)
 - **AI Sostenibilità** - Calcolo intelligente dell'indice di sostenibilità con Gemini AI
 - **Preview Display** - Visualizzazione in tempo reale del display per vetrina
 - **API RESTful** - Backend FastAPI con MongoDB
+- **BrightData Integration** - Crawling asincrono dei dati social con job management
 
 ## 🛠️ Tech Stack
 
