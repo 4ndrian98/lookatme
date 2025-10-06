@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://store-display-1.preview.emergentagent.com/api"
+BASE_URL = "https://docker-cms.preview.emergentagent.com/api"
 TIMEOUT = 30.0
 
 class BackendTester:
