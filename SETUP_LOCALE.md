@@ -48,12 +48,16 @@ MONGO_URL=mongodb://mongodb:27017/lookatme_cms
 JWT_SECRET=tua_chiave_segreta_molto_lunga_e_casuale
 EMERGENT_LLM_KEY=sk-emergent-xxxxxxxxxxxxxxxx
 
-# Opzionali - aggiungi se hai le chiavi
-GOOGLE_MAPS_API_KEY=
+# BrightData Integration (OBBLIGATORIO per social media)
+BRIGHTDATA_API_TOKEN=your_brightdata_token_here
+
+# TripAdvisor (Opzionale)
 TRIPADVISOR_API_KEY=
-FACEBOOK_ACCESS_TOKEN=
-INSTAGRAM_ACCESS_TOKEN=
+
+# Le API dirette di Google/Facebook/Instagram non sono più necessarie
 ```
+
+> 📚 Per maggiori dettagli su BrightData, vedi [BRIGHTDATA_SETUP.md](./BRIGHTDATA_SETUP.md)
 
 **Il file `frontend/.env` è già OK:**
 ```env
