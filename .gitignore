@@ -92,3 +92,7 @@ android-sdk/
 # Allow .env.example files (templates for local setup)
 !.env.example
 !**/.env.example
+-e 
+# Environment files
+*.env
+*.env.*
