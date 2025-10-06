@@ -271,26 +271,40 @@ async def get_tripadvisor_reviews(location_id: str, user_id: str = Depends(get_c
         return {"error": str(e), "reviews": [], "rating": 0}
 
 @app.get("/api/social/facebook-likes")
-async def get_facebook_likes(page_id: str, user_id: str = Depends(get_current_user)):
-    if not FACEBOOK_ACCESS_TOKEN:
-        return {"error": "Facebook access token not configured", "likes": 0, "followers": 0}
+async def get_facebook_likes(page_url: str, user_id: str = Depends(get_current_user)):
+    """
+    Get Facebook page data via BrightData
+    Args:
+        page_url: Full Facebook page URL (e.g., https://www.facebook.com/yourpage)
+    """
+    if not BRIGHTDATA_API_TOKEN:
+        return {"error": "BrightData API token not configured", "likes": 0, "followers": 0}
     
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"https://graph.facebook.com/v18.0/{page_id}",
-                params={
-                    "fields": "fan_count,followers_count,name",
-                    "access_token": FACEBOOK_ACCESS_TOKEN
-                },
-                timeout=10.0
-            )
-            data = response.json()
+        result = await get_social_data_via_brightdata(
+            platform="facebook",
+            url=page_url,
+            api_token=BRIGHTDATA_API_TOKEN,
+            params={"num_of_reviews": 50},
+            wait_for_results=False
+        )
+        
+        if result.get("status") == "job_created":
+            await db.brightdata_jobs.insert_one({
+                "user_id": user_id,
+                "job_id": result["job_id"],
+                "platform": "facebook",
+                "url": page_url,
+                "status": "running",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
             return {
-                "likes": data.get("fan_count", 0),
-                "followers": data.get("followers_count", 0),
-                "name": data.get("name", "")
+                "message": "Crawl job started. Check status with job_id.",
+                "job_id": result["job_id"],
+                "status": "running"
             }
+        else:
+            return result
     except Exception as e:
         return {"error": str(e), "likes": 0, "followers": 0}
 
