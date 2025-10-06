@@ -1,0 +1,86 @@
+version: '3.8'
+
+# Production Docker Compose Configuration
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  # MongoDB Database with authentication
+  mongodb:
+    image: mongo:7.0
+    container_name: lookatme-mongodb-prod
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-changeme}
+      MONGO_INITDB_DATABASE: lookatme_cms
+    volumes:
+      - mongodb_prod_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - lookatme-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD localhost:27017/lookatme_cms --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (FastAPI) with production settings
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lookatme-backend-prod
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://${MONGO_ROOT_USERNAME:-admin}:${MONGO_ROOT_PASSWORD:-changeme}@mongodb:27017
+      - DB_NAME=lookatme_cms
+      - CORS_ORIGINS=${CORS_ORIGINS:-https://yourdomain.com}
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-}
+      - TRIPADVISOR_API_KEY=${TRIPADVISOR_API_KEY:-}
+      - FACEBOOK_ACCESS_TOKEN=${FACEBOOK_ACCESS_TOKEN:-}
+      - INSTAGRAM_ACCESS_TOKEN=${INSTAGRAM_ACCESS_TOKEN:-}
+      - EMERGENT_LLM_KEY=${EMERGENT_LLM_KEY}
+    ports:
+      - "8001:8001"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - lookatme-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend (React) with production build
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        - REACT_APP_BACKEND_URL=${BACKEND_URL:-https://api.yourdomain.com}
+    container_name: lookatme-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - lookatme-network
+    volumes:
+      # Mount SSL certificates if using HTTPS
+      # - ./ssl/cert.pem:/etc/nginx/ssl/cert.pem:ro
+      # - ./ssl/key.pem:/etc/nginx/ssl/key.pem:ro
+
+volumes:
+  mongodb_prod_data:
+    driver: local
+
+networks:
+  lookatme-network:
+    driver: bridge
