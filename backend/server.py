@@ -343,6 +343,149 @@ async def get_instagram_data(profile_url: str, user_id: str = Depends(get_curren
             }
         else:
             return result
+
+# BrightData Job Management Endpoints
+@app.get("/api/brightdata/job-status/{job_id}")
+async def get_brightdata_job_status(job_id: str, user_id: str = Depends(get_current_user)):
+    """Check the status of a BrightData crawl job"""
+    if not BRIGHTDATA_API_TOKEN:
+        raise HTTPException(status_code=500, detail="BrightData API token not configured")
+    
+    try:
+        client = BrightDataClient(BRIGHTDATA_API_TOKEN)
+        status = await client.check_job_status(job_id)
+        
+        # Update job status in database
+        await db.brightdata_jobs.update_one(
+            {"job_id": job_id, "user_id": user_id},
+            {"$set": {"status": status.get("status"), "progress": status.get("progress", 0)}}
+        )
+        
+        return status
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/brightdata/job-results/{job_id}")
+async def get_brightdata_job_results(job_id: str, user_id: str = Depends(get_current_user)):
+    """Get results from a completed BrightData job"""
+    if not BRIGHTDATA_API_TOKEN:
+        raise HTTPException(status_code=500, detail="BrightData API token not configured")
+    
+    try:
+        # Check if job belongs to user
+        job = await db.brightdata_jobs.find_one({"job_id": job_id, "user_id": user_id}, {"_id": 0})
+        if not job:
+            raise HTTPException(status_code=404, detail="Job not found")
+        
+        client = BrightDataClient(BRIGHTDATA_API_TOKEN)
+        result = await client.get_results(job_id)
+        
+        if result.get("status") == "completed":
+            # Parse data based on platform
+            platform = job.get("platform")
+            raw_data = result.get("data", [])
+            
+            from brightdata_integration import PARSERS
+            parser = PARSERS.get(platform)
+            
+            if parser:
+                parsed_data = parser(raw_data)
+            else:
+                parsed_data = raw_data
+            
+            # Update job status and store results
+            await db.brightdata_jobs.update_one(
+                {"job_id": job_id},
+                {"$set": {
+                    "status": "completed",
+                    "results": parsed_data,
+                    "completed_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+            
+            return {
+                "status": "success",
+                "platform": platform,
+                "data": parsed_data,
+                "job_id": job_id
+            }
+        else:
+            return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/brightdata/my-jobs")
+async def get_my_brightdata_jobs(user_id: str = Depends(get_current_user)):
+    """Get all BrightData jobs for the current user"""
+    try:
+        jobs = await db.brightdata_jobs.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(20).to_list(length=20)
+        
+        return {"jobs": jobs}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/brightdata/refresh-all-social")
+async def refresh_all_social_data(user_id: str = Depends(get_current_user)):
+    """
+    Trigger crawl jobs for all configured social platforms
+    Returns job_ids for tracking
+    """
+    if not BRIGHTDATA_API_TOKEN:
+        raise HTTPException(status_code=500, detail="BrightData API token not configured")
+    
+    try:
+        # Get user's store config
+        config = await db.store_configs.find_one({"user_id": user_id}, {"_id": 0})
+        if not config:
+            raise HTTPException(status_code=404, detail="Store configuration not found")
+        
+        jobs = []
+        
+        # Trigger Instagram crawl
+        if config.get("instagram_url"):
+            result = await get_social_data_via_brightdata(
+                platform="instagram",
+                url=config["instagram_url"],
+                api_token=BRIGHTDATA_API_TOKEN,
+                wait_for_results=False
+            )
+            if result.get("status") == "job_created":
+                jobs.append({"platform": "instagram", "job_id": result["job_id"]})
+        
+        # Trigger Facebook crawl
+        if config.get("facebook_url"):
+            result = await get_social_data_via_brightdata(
+                platform="facebook",
+                url=config["facebook_url"],
+                api_token=BRIGHTDATA_API_TOKEN,
+                params={"num_of_reviews": 50},
+                wait_for_results=False
+            )
+            if result.get("status") == "job_created":
+                jobs.append({"platform": "facebook", "job_id": result["job_id"]})
+        
+        # Trigger Google Maps crawl
+        if config.get("google_maps_url"):
+            result = await get_social_data_via_brightdata(
+                platform="googlemaps",
+                url=config["google_maps_url"],
+                api_token=BRIGHTDATA_API_TOKEN,
+                params={"days_limit": 30},
+                wait_for_results=False
+            )
+            if result.get("status") == "job_created":
+                jobs.append({"platform": "googlemaps", "job_id": result["job_id"]})
+        
+        return {
+            "message": f"Started {len(jobs)} crawl jobs",
+            "jobs": jobs
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
     except Exception as e:
         return {"error": str(e), "followers": 0, "media_count": 0}
 
