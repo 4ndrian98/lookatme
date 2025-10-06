@@ -348,6 +348,8 @@ async def get_instagram_data(profile_url: str, user_id: str = Depends(get_curren
             }
         else:
             return result
+    except Exception as e:
+        return {"error": str(e), "followers": 0, "media_count": 0}
 
 # BrightData Job Management Endpoints
 @app.get("/api/brightdata/job-status/{job_id}")
