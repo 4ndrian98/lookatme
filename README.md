@@ -126,19 +126,25 @@ look-at-me-cms/
 
 ## 🔑 Ottenere le Chiavi API
 
-### Emergent LLM Key
+### Emergent LLM Key (Obbligatoria)
 1. Accedi al tuo account Emergent
 2. Vai su Profilo → Universal Key
 3. Copia la chiave e aggiungila a `backend/.env`
 
-### Google Maps API
-1. Vai su [Google Cloud Console](https://console.cloud.google.com/)
-2. Abilita Places API
-3. Crea credenziali API Key
+### BrightData API Token (Obbligatorio per Social Media)
+1. Vai su [BrightData Dashboard](https://brightdata.com/)
+2. Accedi al tuo account
+3. Naviga in **API Settings**
+4. Copia il tuo **API Token**
+5. Aggiungi in `backend/.env` come `BRIGHTDATA_API_TOKEN`
 
-### Altri Servizi
-- **TripAdvisor**: [TripAdvisor Content API](https://www.tripadvisor.com/developers)
-- **Facebook/Instagram**: [Meta for Developers](https://developers.facebook.com/)
+> 📚 **Guida completa**: Vedi [BRIGHTDATA_SETUP.md](./BRIGHTDATA_SETUP.md) per dettagli
+
+### TripAdvisor API (Opzionale)
+- [TripAdvisor Content API](https://www.tripadvisor.com/developers)
+- Aggiungi la chiave API in `backend/.env`
+
+> ⚠️ **Nota**: Le API dirette di Google Maps, Facebook e Instagram non sono più necessarie se usi BrightData
 
 ## 🧪 Testing
 
