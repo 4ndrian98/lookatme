@@ -50,9 +50,11 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        - REACT_APP_BACKEND_URL=http://localhost:8001
+        - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL:-http://localhost:8001}
     container_name: lookatme-frontend
     restart: unless-stopped
+    env_file:
+      - frontend/.env
     ports:
       - "3000:80"
     depends_on:
