@@ -21,8 +21,8 @@ services:
   # Backend API (FastAPI)
   backend:
     build:
-      context: ./backend
-      dockerfile: ../Dockerfile.backend
+      context: .
+      dockerfile: Dockerfile.backend
     container_name: lookatme-backend
     restart: unless-stopped
     environment:
