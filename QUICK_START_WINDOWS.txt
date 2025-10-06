@@ -1,0 +1,115 @@
+╔══════════════════════════════════════════════════════════════╗
+║         Look@Me CMS - AVVIO RAPIDO WINDOWS                   ║
+╚══════════════════════════════════════════════════════════════╝
+
+📋 PASSO 1: PREPARA DOCKER
+─────────────────────────────────────────────────────────────
+1. Apri Docker Desktop (menu Start)
+2. Aspetta che l'icona della balena sia attiva (in basso a destra)
+3. L'icona deve essere ferma, non animata
+
+✅ Quando l'icona è ferma = Docker è pronto!
+
+
+🚀 PASSO 2: AVVIA L'APPLICAZIONE
+─────────────────────────────────────────────────────────────
+Hai 2 opzioni:
+
+OPZIONE A - Script automatico (CONSIGLIATO):
+   → Doppio click su: start-docker.bat
+
+OPZIONE B - Comando manuale:
+   → Apri PowerShell in questa cartella
+   → Esegui: docker-compose up --build
+
+
+⏳ PASSO 3: ASPETTA (prima volta = 5-10 minuti)
+─────────────────────────────────────────────────────────────
+- Scarica le immagini Docker
+- Costruisce backend e frontend
+- Avvia tutti i servizi
+
+Quando vedi "Application startup complete" = Pronto! ✅
+
+
+🌐 PASSO 4: APRI IL BROWSER
+─────────────────────────────────────────────────────────────
+Frontend:  http://localhost:3000
+Backend:   http://localhost:8001/docs
+
+
+🎯 PASSO 5: PRIMO UTILIZZO
+─────────────────────────────────────────────────────────────
+1. Clicca "Registrati"
+2. Compila i campi (username, email, nome attività, password)
+3. Accedi al CMS
+4. Personalizza il tuo display!
+
+
+🛑 FERMARE L'APPLICAZIONE
+─────────────────────────────────────────────────────────────
+→ Doppio click su: stop-docker.bat
+→ Oppure: Ctrl+C nella finestra PowerShell
+
+
+❌ PROBLEMI?
+─────────────────────────────────────────────────────────────
+Errore: "The system cannot find the file specified"
+✅ Soluzione: Docker Desktop non è avviato, aprilo e riprova
+
+Errore: "Port already in use"  
+✅ Soluzione: Ferma altri servizi sulle porte 3000, 8001, 27017
+
+Errore: "Insufficient resources"
+✅ Soluzione: Docker Desktop → Settings → Resources → 
+              Aumenta Memory a 4GB
+
+📖 Guida completa: WINDOWS_SETUP.md
+
+
+📚 FILE UTILI
+─────────────────────────────────────────────────────────────
+WINDOWS_SETUP.md          → Guida dettagliata Windows
+DOCKER_DEPLOY.md          → Troubleshooting completo
+API_KEYS_INSTRUCTIONS.md  → Come ottenere chiavi social media
+README_DOCKER.md          → Reference generale
+
+
+💡 COMANDI UTILI (PowerShell)
+─────────────────────────────────────────────────────────────
+Visualizza logs:           docker-compose logs -f
+Ferma servizi:             docker-compose down
+Riavvia un servizio:       docker-compose restart backend
+Stato container:           docker ps
+Pulisci tutto:             docker-compose down -v
+
+
+🔧 CONFIGURAZIONE OPZIONALE
+─────────────────────────────────────────────────────────────
+Per abilitare integrazioni social media (Google, Facebook, ecc):
+1. Copia .env.docker in .env
+2. Modifica .env con le tue API keys
+3. Riavvia: docker-compose restart backend
+
+📖 Dettagli in: API_KEYS_INSTRUCTIONS.md
+
+
+✨ CARATTERISTICHE
+─────────────────────────────────────────────────────────────
+✅ Autenticazione JWT sicura
+✅ Editor visuale CMS
+✅ Integrazioni social (Google, Facebook, Instagram, TripAdvisor)
+✅ AI per calcolo sostenibilità (Gemini)
+✅ Anteprima live display
+✅ Gestione servizi e certificazioni
+
+
+🎉 PRONTO PER INIZIARE!
+─────────────────────────────────────────────────────────────
+1. Avvia Docker Desktop
+2. Doppio click su start-docker.bat
+3. Apri http://localhost:3000
+4. Crea il tuo primo display!
+
+
+Buon lavoro con Look@Me CMS! 🚀
