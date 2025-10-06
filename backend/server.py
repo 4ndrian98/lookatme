@@ -88,9 +88,14 @@ class StoreConfig(BaseModel):
     # Recognitions
     recognitions: List[Dict[str, str]] = []  # [{"name": "cert_name", "icon_url": "..."}]
     
-    # Social Media Links
+    # Social Media Links (URLs for BrightData)
+    instagram_url: Optional[str] = None
+    facebook_url: Optional[str] = None
+    google_maps_url: Optional[str] = None
+    tripadvisor_location_id: Optional[str] = None  # Still using direct API
+    
+    # Legacy fields (for backwards compatibility)
     google_place_id: Optional[str] = None
-    tripadvisor_location_id: Optional[str] = None
     facebook_page_id: Optional[str] = None
     instagram_username: Optional[str] = None
     
