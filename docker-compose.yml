@@ -25,17 +25,11 @@ services:
       dockerfile: Dockerfile.backend
     container_name: lookatme-backend
     restart: unless-stopped
+    env_file:
+      - backend/.env
     environment:
-      - MONGO_URL=mongodb://mongodb:27017
-      - DB_NAME=lookatme_cms
+      - MONGO_URL=mongodb://mongodb:27017/lookatme_cms
       - CORS_ORIGINS=*
-      - JWT_SECRET=lookatme-secret-key-change-in-production
-      - GEMINI_API_KEY=AIzaSyA4xgtFgqHR-yEEB3d9iupH5dlC8DP1Dz8
-      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-}
-      - TRIPADVISOR_API_KEY=${TRIPADVISOR_API_KEY:-}
-      - FACEBOOK_ACCESS_TOKEN=${FACEBOOK_ACCESS_TOKEN:-}
-      - INSTAGRAM_ACCESS_TOKEN=${INSTAGRAM_ACCESS_TOKEN:-}
-      - EMERGENT_LLM_KEY=sk-emergent-a21572726F37c793c9
     ports:
       - "8001:8001"
     depends_on:
